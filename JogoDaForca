@@ -1,0 +1,243 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <locale.h>
+#include <time.h>
+#include <string.h>
+
+int aparecerBoneco(int erros){
+	
+	if(erros == 0){
+	printf("  -----------    \n");
+    printf("  |         |    \n");
+    printf("  |              \n");
+    printf("  |              \n");
+    printf("  |              \n");
+    printf("  |              \n");
+	}else if(erros == 1){
+	printf("  -----------    \n");
+    printf("  |         |    \n");
+    printf("  |         O    \n");
+    printf("  |              \n");
+    printf("  |              \n");
+    printf("  |              \n");
+	}else if(erros == 2){
+	printf("  -----------    \n");
+    printf("  |         |    \n");
+    printf("  |         O    \n");
+    printf("  |         |    \n");
+    printf("  |              \n");
+    printf("  |              \n");
+	}else if(erros == 3){
+	printf("  -----------    \n");
+    printf("  |         |    \n");
+    printf("  |         O    \n");
+    printf("  |         |-   \n");
+    printf("  |              \n");
+    printf("  |              \n");
+	}else if(erros == 4){
+	printf("  -----------    \n");
+    printf("  |         |    \n");
+    printf("  |         O    \n");
+    printf("  |        -|-   \n");
+    printf("  |              \n");
+    printf("  |              \n");
+	}else if(erros == 5){
+	printf("  -----------    \n");
+    printf("  |         |    \n");
+    printf("  |         O    \n");
+    printf("  |        -|-   \n");
+    printf("  |        /     \n");
+    printf("  |              \n");
+	}else if(erros == 6){
+	printf("  -----------    \n");
+    printf("  |         |    \n");
+    printf("  |         O    \n");
+    printf("  |        -|-   \n");
+    printf("  |        / \\  \n");
+    printf("  |              \n");
+	}
+
+}
+
+int sorteioDinheiro(int dado, int *acertos){
+   	
+   	if(dado==19){
+   		return 0;
+	}else if(dado==20){
+		return 20;
+	}else{
+		return 50*dado;
+	}
+
+ 
+}
+
+int verificarPalpite(char palavra[30], char secreta[30], char palpite, int tamanho, int *erros, int *acertos){
+	int testeErro = 1;
+	
+	*acertos = 0;
+	
+	for(int i=0;i<tamanho;i++){
+		if(palavra[i] == palpite){
+			secreta[i] = palpite;
+			testeErro = 0;
+			*acertos+=1;
+		}
+	}
+	
+	if(testeErro == 1){
+		*erros+=1;
+	}
+	return testeErro;
+}
+int verificarVencedor(char palavra[30], char secreta[30]){
+	if(strcmp(secreta, palavra) == 0){
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+int main(void){
+    setlocale(LC_ALL, "Portuguese");
+    srand(time(NULL));
+
+    char palavra[30], secreta[30], palpite = ' ';
+    int tamanho = 0, vez = 0, vitorias1=0, vitorias2=0, vitorias3=0, acertos = 0, erros = 0, derrota = 0, testeAcerto = 0, dinheiroSorteado = 0;
+    int dado = 0, dinheiro1 = 0, dinheiro2 = 0, dinheiro3 = 0;
+
+    printf("Digite a palavra a ser descoberta: ");
+    scanf("%s", palavra);
+    system("cls");
+    
+    for(int i=0; palavra[i] != '\0';i++){
+    	tamanho++;
+	}
+    
+    for(int i=0;i<tamanho;i++){
+    	secreta[i] = '_';
+	}
+    
+    while(vitorias1 == 0 && vitorias2 == 0 && vitorias3 == 0 && derrota == 0){
+		system("cls");
+		aparecerBoneco(erros);
+		printf("\n\n\nPALAVRA: ");
+    	for(int i=0;i<tamanho;i++){
+    		printf("%c ", secreta[i]);
+		}
+		printf("\nERROS: %d", erros);
+		
+    	if(vez==1){
+    		dado = 1 + rand() % 20;
+			dinheiroSorteado = sorteioDinheiro(dado, &acertos);
+    		printf("\n\n\tVEZ DO JOGADOR %d!\n\n", vez);
+    		if(dinheiroSorteado == 0){
+    			printf("Que pena! Você PERDEU TUDO!\n\n");
+    			dinheiro1 = 0;
+    			system("pause");
+			}else if(dinheiroSorteado == 20){
+				printf("Você caiu na opção PASSAR A VEZ!\n\n")/
+    			system("pause");
+			}else{
+			printf("Este palpite vale R$%d para cada acerto! \n\n", dinheiroSorteado);
+    		printf("Total acumudado: R$%d\n\n", dinheiro1);
+			printf("Digite o seu palpite: ");
+			getchar();
+			scanf("%c", &palpite);
+			testeAcerto = verificarPalpite(palavra, secreta, palpite, tamanho, &erros, &acertos);
+				if(testeAcerto == 0){
+					printf("\n\nVocê ganhou R$%d!\n\n", dinheiroSorteado*acertos);
+    				system("pause");
+				 	dinheiro1 += (dinheiroSorteado*acertos);
+				}
+			vitorias1 = verificarVencedor(palavra, secreta);
+			}
+			
+		}else if(vez==2){
+		    dado = 1 + rand() % 20;
+			dinheiroSorteado = sorteioDinheiro(dado, &acertos);
+    		printf("\n\n\tVEZ DO JOGADOR %d!\n\n", vez);
+    		if(dinheiroSorteado == 0){
+    			printf("Que pena! Você PERDEU TUDO!\n\n");
+    			dinheiro2 = 0;
+    			system("pause");
+			}else if(dinheiroSorteado == 20){
+				printf("Você caiu na opção PASSAR A VEZ!\n\n")/
+    			system("pause");
+			}else{
+			printf("Este palpite vale R$%d para cada acerto! \n\n", dinheiroSorteado);
+    		printf("Total acumudado: R$%d\n\n", dinheiro2);
+			printf("Digite o seu palpite: ");
+			getchar();
+			scanf("%c", &palpite);
+			testeAcerto = verificarPalpite(palavra, secreta, palpite, tamanho, &erros, &acertos);
+				if(testeAcerto == 0){
+					printf("\n\nVocê ganhou R$%d!\n\n", dinheiroSorteado*acertos);
+    				system("pause");
+				 	dinheiro2 += (dinheiroSorteado*acertos);
+				}
+			vitorias2 = verificarVencedor(palavra, secreta);
+			}
+		}else if(vez==3){
+    		dado = 1 + rand() % 20;
+			dinheiroSorteado = sorteioDinheiro(dado, &acertos);
+    		printf("\n\n\tVEZ DO JOGADOR %d!\n\n", vez);
+    		if(dinheiroSorteado == 0){
+    			printf("Que pena! Você PERDEU TUDO!\n\n");
+    			dinheiro3 = 0;
+    			system("pause");
+			}else if(dinheiroSorteado == 20){
+				printf("Você caiu na opção PASSAR A VEZ!\n\n")/
+    			system("pause");
+			}else{
+			printf("Este palpite vale R$%d para cada acerto! \n\n", dinheiroSorteado);
+    		printf("Total acumudado: R$%d\n\n", dinheiro3);
+			printf("Digite o seu palpite: ");
+			getchar();
+			scanf("%c", &palpite);
+			testeAcerto = verificarPalpite(palavra, secreta, palpite, tamanho, &erros, &acertos);
+				if(testeAcerto == 0){
+					printf("\n\nVocê ganhou R$%d!\n\n", dinheiroSorteado*acertos);
+    				system("pause");
+				 	dinheiro3 += (dinheiroSorteado*acertos);
+				}
+			vitorias3 = verificarVencedor(palavra, secreta);
+			}
+			vez=0;
+		}
+		
+		if(erros == 6){
+			derrota++;
+		}
+		vez++;
+	}
+	
+	if(vitorias1>0){
+		system("cls");
+		aparecerBoneco(erros);
+		printf("\n\nPARABENS JOGADOR 1, VOCÊ VENCEU!\n\n");
+		printf("A palavra era %s!!\n\n", palavra);
+		printf("O seu prêmio é R$%d\n\n", dinheiro1);
+		printf("\n\nObrigado por jogar!!\n\n");
+	}else if(vitorias2>0){
+		system("cls");
+		aparecerBoneco(erros);
+		printf("\n\nPARABENS JOGADOR 2, VOCÊ VENCEU!\n\n");
+		printf("A palavra era %s!!\n\n", palavra);
+		printf("O seu prêmio é R$%d\n\n", dinheiro2);
+		printf("\n\nObrigado por jogar!!\n\n");
+	}else if(vitorias3>0){
+		system("cls");
+		aparecerBoneco(erros);
+		printf("\n\nPARABENS JOGADOR 3, VOCÊ VENCEU!\n\n");
+		printf("A palavra era %s!!\n\n", palavra);
+		printf("O seu prêmio é R$%d\n\n", dinheiro3);
+		printf("\n\nObrigado por jogar!!\n\n");
+	}else if(derrota>0){
+		system("cls");
+		aparecerBoneco(erros);
+		printf("\n\nQue pena! Ninguém venceu! \n\n");
+		printf("A palavra era %s!!\n\n", palavra);
+		printf("\n\nObrigado por jogar!!\n\n");
+	}
+}
